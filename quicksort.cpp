@@ -4,39 +4,41 @@
 
 static unsigned comparisons = 0;
 
-void heapify(int array[], int size, int i){
-    int largest = i,
-        left = 2 * i + 1,
-        right = 2 * i + 2,
+static int partition(int array[], int low, int high){
+    int rand_idx = low + rand() % (high - low + 1);
+    int pivot = array[rand_idx],
+        i = low - 1,
+        j = low,
         temp = 0;
-    if(left < size && array[left] > array[largest]){
-        largest = left;
+    temp = array[rand_idx];
+    array[rand_idx] = array[high];
+    array[high] = temp;
+    while(j < high){
+        if (array[j] < pivot){
+            i++;
+            temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+        }   j++;
         comparisons++;
-    }
-    if(right < size && array[right] > array[largest]){
-        largest = right;
-        comparisons++;
-    }
-    if(largest != i){
-        temp = array[i];
-        array[i] = array[largest];
-        array[largest] = temp;
-        heapify(array, size, largest);
-    }
+    }   ++i;
+    temp = array[i];
+    array[i] = array[high];
+    array[high] = temp;
+    return i;
 }
 
-unsigned heap_sort(int array[], int size){
-    int i = size / 2 - 1,
-        temp = 0;
-    for(; i >= 0; --i){
-        heapify(array, size, i);
-    }
-    for(i = size - 1;i > 0; --i){
-        temp = array[0];
-        array[0] = array[i];
-        array[i] = temp;
-        heapify(array, i, 0);
-    }   return comparisons;
+static void quick_sort_rec(int array[], int start, int end){
+    if(end <= start) return;
+    int pivot_idx = partition(array, start, end);
+    quick_sort_rec(array, start, pivot_idx - 1);
+    quick_sort_rec(array, pivot_idx + 1, end);
+}
+
+unsigned quick_sort(int array[], int size){
+    srand(time(0));
+    quick_sort_rec(array, 0, size - 1);
+    return comparisons;
 }
 
 void get(int array[], unsigned size){
@@ -65,14 +67,14 @@ int main(void){
     srand(time(0));
     const int low = 250;
     const int high = 750;
-    int *array = calloc(size, sizeof(int));
+    int *array = (int*)calloc(size, sizeof(int));
     for (int i = 0; i < size; i++) {
         int element = low + rand() % (high - low + 1);
         array[i] = element;
     }   get(array, size);
 
     // sort
-    const int comparisons = heap_sort(array, size);
+    const int comparisons = quick_sort(array, size);
     get(array, size);
     printf("Total number of comparisons: %u\n", comparisons);
 

@@ -43,7 +43,6 @@ static void merge(int array[], int start, int mid, int end){
 
 static void mergesort_r(int array[], int start, int end){
     if(start >= end) return;
-    comparisons++;
     int mid = start + (end - start)/2;
     mergesort_r(array, start, mid);
     mergesort_r(array, mid + 1, end);
@@ -81,7 +80,7 @@ int main(void){
     srand(time(0));
     const int low = 250;
     const int high = 750;
-    int *array = calloc(size, sizeof(int));
+    int *array = (int*)calloc(size, sizeof(int));
     for (int i = 0; i < size; i++) {
         int element = low + rand() % (high - low + 1);
         array[i] = element;

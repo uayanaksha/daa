@@ -2,18 +2,40 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-unsigned insertion_sort(int array[], unsigned size){
-    unsigned comparisons = 0;
-    for(int i = 1; i < size; i++){
+static unsigned comparisons = 0;
+
+void heapify(int array[], int size, int i){
+    int largest = i,
+        left = 2 * i + 1,
+        right = 2 * i + 2,
+        temp = 0;
+    if(left < size && array[left] > array[largest]){
+        largest = left;
         comparisons++;
-        int key = array[i];
-        int j = i - 1;
-        while (j >= 0 && array[j] > key ) {
-            comparisons++;
-            array[j+1] = array[j];
-            j--;
-        }   j++;
-        array[j] = key;
+    }
+    if(right < size && array[right] > array[largest]){
+        largest = right;
+        comparisons++;
+    }
+    if(largest != i){
+        temp = array[i];
+        array[i] = array[largest];
+        array[largest] = temp;
+        heapify(array, size, largest);
+    }
+}
+
+unsigned heap_sort(int array[], int size){
+    int i = size / 2 - 1,
+        temp = 0;
+    for(; i >= 0; --i){
+        heapify(array, size, i);
+    }
+    for(i = size - 1;i > 0; --i){
+        temp = array[0];
+        array[0] = array[i];
+        array[i] = temp;
+        heapify(array, i, 0);
     }   return comparisons;
 }
 
@@ -43,14 +65,14 @@ int main(void){
     srand(time(0));
     const int low = 250;
     const int high = 750;
-    int *array = calloc(size, sizeof(int));
+    int *array = (int*)calloc(size, sizeof(int));
     for (int i = 0; i < size; i++) {
         int element = low + rand() % (high - low + 1);
         array[i] = element;
     }   get(array, size);
 
     // sort
-    const int comparisons = insertion_sort(array, size);
+    const int comparisons = heap_sort(array, size);
     get(array, size);
     printf("Total number of comparisons: %u\n", comparisons);
 

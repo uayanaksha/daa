@@ -2,42 +2,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static unsigned comparisons = 0;
-
-int getMax(int arr[], unsigned size){
-    int max = arr[0];
+unsigned insertion_sort(int array[], unsigned size){
+    unsigned comparisons = 0;
     for(int i = 1; i < size; i++){
-        if(max < arr[i]) max = arr[i];
-    }   return max;
-}
-
-void counting_sort(int array[], int size){
-    int min = 2147483647, max = -2147483648;
-    for(int i = 0; i < size; i++){
-        if(array[i] < min) min = array[i];
-        if(array[i] > max) max = array[i];
-        comparisons+=2;
-    }
-    int newSize = max - min + 1;
-    int *ctr = (int*) calloc(newSize, sizeof(int));
-    for(int i = 0; i < size; i++){
-        ctr[array[i] - min]++;
-    }
-    int idx = 0;
-    for(int i = 0; i < newSize; i++){
-        while(ctr[i] > 0){
-            array[idx] = i + min;
-            ctr[i]--;
-            idx++;
+        comparisons++;
+        int key = array[i];
+        int j = i - 1;
+        while (j >= 0 && array[j] > key ) {
             comparisons++;
-        }   comparisons++;
-    }   free(ctr);
-}
-
-unsigned radix_sort(int arr[], int size){
-    int mx = getMax(arr, size);
-    for(int exp = 1; mx/exp > 0; exp *= 10){
-        counting_sort(arr, size);
+            array[j+1] = array[j];
+            j--;
+        }   j++;
+        array[j] = key;
     }   return comparisons;
 }
 
@@ -67,14 +43,14 @@ int main(void){
     srand(time(0));
     const int low = 250;
     const int high = 750;
-    int *array = calloc(size, sizeof(int));
+    int *array = (int*)calloc(size, sizeof(int));
     for (int i = 0; i < size; i++) {
         int element = low + rand() % (high - low + 1);
         array[i] = element;
     }   get(array, size);
 
     // sort
-    const int comparisons = radix_sort(array, size);
+    const int comparisons = insertion_sort(array, size);
     get(array, size);
     printf("Total number of comparisons: %u\n", comparisons);
 
