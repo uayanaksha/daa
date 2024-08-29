@@ -88,9 +88,9 @@ int main(void){
     }   get(array, size);
 
     // sort
-    const int comparisons = mergesort(array, size);
+    const int comparison_c = mergesort(array, size);
     get(array, size);
-    printf("Total number of comparisons: %u\n", comparisons);
+    printf("Total number of comparisons: %u\n", comparison_c);
 
     // Delete array
     free(array);

@@ -41,8 +41,8 @@ int main(void){
 
     // Populate array
     srand(time(0));
-    const int low = 150;
-    const int high = 450;
+    const int low = 250;
+    const int high = 750;
     int *array = calloc(size, sizeof(int));
     for (int i = 0; i < size; i++) {
         int element = low + rand() % (high - low + 1);
