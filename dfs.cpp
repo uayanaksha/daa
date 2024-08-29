@@ -9,7 +9,7 @@ typedef struct Stack{
 Stack* init(unsigned size){
     Stack *ptr = (Stack*) malloc(sizeof(Stack));
     if(ptr){
-        ptr->arr = (int*)calloc(size, sizeof(int));
+        ptr->arr = (int*)(int*)calloc(size, sizeof(int));
         ptr->head = -1;
         ptr->maxVol = size;
     }   return ptr;
@@ -83,9 +83,9 @@ int main(void){
     if(2*eCount > vCount*(vCount-1)) return 1;
     // Declare Adj. Matrix
     int **arr = NULL;
-    arr = calloc(vCount, sizeof(int*));
+    arr = (int**)calloc(vCount, sizeof(int*));
     for(int i = 0 ; i < vCount; i++){
-        arr[i] = calloc(vCount, sizeof(int));
+        arr[i] = (int*)calloc(vCount, sizeof(int));
     }
     // Initialize matrix
     for(int i =0, iidx, fidx; i < eCount;){
