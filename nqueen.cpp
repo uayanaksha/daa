@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include <cstdlib>
 #include <vector>
 
 using namespace std;
@@ -11,6 +10,7 @@ class Board {
         vector<int> rd;
         vector<int> cl;
         unsigned n;
+
     public:
         Board(const unsigned &n) {
             this->n = n;
@@ -34,7 +34,7 @@ class Board {
             if(solveNQ_priv(0)) cout << "Nqueen solved" << endl;
             else cout << "Cannot be solved" << endl;
         }
-        
+
     private:
         bool solveNQ_priv(int col){
             if(col >= n) return true;
@@ -43,9 +43,9 @@ class Board {
                 ldIdx = (n-1) + (row-col);
                 rdIdx = row + col;
                 if(ld[ldIdx] != 1 && rd[rdIdx] != 1 && cl[row] != 1){
-                    board[row][col] = ld[ldIdx] = rd[rdIdx] = cl[row] = 1;
+                    board[col][row] = ld[ldIdx] = rd[rdIdx] = cl[row] = 1;
                     if(solveNQ_priv(col + 1)) return true;
-                    board[row][col] = ld[ldIdx] = rd[rdIdx] = cl[row] = 0;
+                    board[col][row] = ld[ldIdx] = rd[rdIdx] = cl[row] = 0;
                 }
             }   return false;
         }
